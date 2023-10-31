@@ -12,9 +12,18 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::all();
+        $users = User::all();
 
-        return response()->json($user);
+        return response()->json($users);
+    }
+
+    public function list(){
+        $users = User::all();
+
+        return view('userIndex',compact('users'));
+    }
+    public function create(){
+        return view('createUser');
     }
 
     /**
@@ -22,7 +31,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::create([
+            'name'=>$request->input('name'),
+            'email'=>$request->input('email'),
+            'password'=>$request->input('password'),
+        ]);
+
+        return view('createuser');
     }
 
     /**

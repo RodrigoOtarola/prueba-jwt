@@ -22,10 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('register',[AuthController::class,'register']);
 Route::post('login',[AuthController::class,'login']);
 
-
-
 Route::group(['middleware'=>['jwt_verify']],function(){
     Route::get('users',[\App\Http\Controllers\UserController::class,'index']);
     Route::get('user/{id}',[\App\Http\Controllers\UserController::class,'show']);
-    Route::get('personal/{client}',[\App\Http\Controllers\ClientController::class,'show']);
+    Route::get('client/{client}',[\App\Http\Controllers\ClientController::class,'show']);
 });

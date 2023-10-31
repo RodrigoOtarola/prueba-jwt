@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [App\Http\Controllers\UserController::class,'create']);
+Route::post('/', [App\Http\Controllers\UserController::class,'store'])->name('user.store');
+Route::get('UserList',[App\Http\Controllers\UserController::class,'list'])->name('user.list');
