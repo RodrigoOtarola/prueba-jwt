@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Log;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -48,6 +50,15 @@ class AuthController extends Controller
             //si token no existe
             return response()->json(['error' => 'No existe token'], 500);
         }
+
+        $log= Log::create([
+            'user'=>Auth::user()->id,
+            'token'=>$token,
+            'accion'=>'Inicio de sesión'
+        ]);
+
+        //dd($log);
+
         //Retonamos el token
         return response()->json(compact('token'));
     }
