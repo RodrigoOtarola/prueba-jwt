@@ -60,7 +60,21 @@ class AuthController extends Controller
         //dd($log);
 
         //Retonamos el token
-        return response()->json(compact('token'));
+        //return response()->json(compact('token'));
+
+        //Instanciamos la function respondWithToken
+        return $this->respondWithToken($token);
+    }
+
+    //Respuesta que se mostrara en metodo login
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            //'Expira' => auth()->environment('JWT_TTL')
+            'Expira' =>  env('JWT_TTL')
+        ]);
     }
 
 }
