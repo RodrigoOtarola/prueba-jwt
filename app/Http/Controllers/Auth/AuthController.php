@@ -9,11 +9,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Livewire\Response;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+
 class AuthController extends Controller
 {
+    /** REGISTRO DE USUARIOS **/
     public function register(Request $request){
 
         $validator = Validator::make($request->all(), [
@@ -34,17 +37,21 @@ class AuthController extends Controller
 
         $token = JWTAuth::fromUser($user);
 
-        return response()->json(compact('user','token'),201);
+        //return response()->json(compact('user','token'),201);
+
+        //HTTP_CREATED retorna el código 201.
+        return response($user,200);
     }
 
     public function login(Request $request){
         //Almacenamos email y credenciales
         $credentials = $request->only('name', 'password');
 
-        /** VALIDACIONES**/
+        /** VALIDACIONES **/
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Credenciales o usuario invalidas'], 400);
+                //HTTP_UNAUTHORIZED retorna el error 404
+                return response()->json(['error' => 'Credenciales o usuario invalidas'], 404);
             }
         } catch (JWTException $e) {
             //si token no existe
@@ -66,7 +73,7 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    //Respuesta que se mostrara en metodo login
+    /** Respuesta que se mostrara en metodo login **/
     protected function respondWithToken($token)
     {
         return response()->json([
@@ -76,5 +83,13 @@ class AuthController extends Controller
             'Expira' =>  env('JWT_TTL')
         ]);
     }
+
+    /** Logout **/
+    /*public function logout(){
+        auth()->logout();
+
+        return response()->json(['message'=>'Logout ok']);
+
+    }*/
 
 }
